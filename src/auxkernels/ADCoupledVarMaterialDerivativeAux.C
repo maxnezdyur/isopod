@@ -43,15 +43,13 @@ ADCoupledVarMaterialDerivativeAux::computeValue()
 
   const auto & phis = _coupled_var.phi();
 
-  auto mat_derivatives = _ad_prop[_qp].derivatives();
+  const auto & mat_derivatives = _ad_prop[_qp].derivatives();
 
   Real _derivative_value = 0;
 
   for (const auto & dof : dofs)
-  {
-    for (const auto & phi : phis[_qp])
-      _derivative_value += phi * mat_derivatives[dof];
-  }
+    for (dof_id_type i : index_range(phis))
+      _derivative_value += phis[i][_qp] * mat_derivatives[dof];
 
   return _derivative_value;
 }
